@@ -1,18 +1,16 @@
-import './App.css'
-import { Provider } from 'react-redux'
-import { store } from './store'
-import Login from './pages/Login'
+import "./App.css";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./routes/AppRoutes";
+import Layout from "./components/Layout";
 
 function App() {
-
   return (
-    <>
-      <Provider store={store}>
-        <div>Hello World</div>
-        <Login />
-      </Provider>
-    </>
-  )
+    <BrowserRouter>
+      <Layout>
+        <AppRoutes />
+      </Layout>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

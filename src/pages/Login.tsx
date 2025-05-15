@@ -1,34 +1,56 @@
-import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
-import { login, logout } from '../features/auth/authSlice'
+import React from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
-const Login = () => {
-  const dispatch = useAppDispatch()
-  const auth = useAppSelector(state => state.auth)
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+});
 
-  const handleLogin = () => {
-    const fakeUser = {
-      id: '1',
-      name: 'Lokesh',
-      email: 'lokesh@example.com',
-      token: 'abc123',
+const Login: React.FC = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
+
+  const onSubmit = async (data: any) => {
+    try {
+    } catch (error) {
+      alert("Login failed. Please try again.");
     }
-    dispatch(login(fakeUser))
-  }
-
-  const handleLogout = () => dispatch(logout())
+  };
 
   return (
     <div>
-      {auth.isAuthenticated ? (
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <p>Welcome, {auth.user?.name}</p>
-          <button onClick={handleLogout}>Logout</button>
+          <input {...register("email")} placeholder="Email"></input>
+          {errors.email && <p>{errors.email.message}</p>}
         </div>
-      ) : (
-        <button onClick={handleLogin}>Login</button>
-      )}
+
+        <div>
+          <input
+            {...register("password")}
+            placeholder="Password"
+            type="password"
+          />
+          {errors.password && <p>{errors.password.message}</p>}
+        </div>
+
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Logging in..." : "Login"}
+        </button>
+      </form>
     </div>
-  )
-}
+  );
+};
 
 export default Login;
