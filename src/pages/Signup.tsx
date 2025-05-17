@@ -2,11 +2,11 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
-import { login } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
+  firstName: Yup.string().required("Firstname is Required"),
+  lastName: Yup.string(),
   email: Yup.string()
     .email("Invalid email format")
     .required("Email is required"),
@@ -15,8 +15,7 @@ const validationSchema = Yup.object().shape({
     .required("Password is required"),
 });
 
-const Login: React.FC = () => {
-  const dispatch = useDispatch();
+const Signup: React.FC = () => {
   const navigate = useNavigate();
 
   const {
@@ -29,15 +28,7 @@ const Login: React.FC = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      const response = {
-        id: "1",
-        name: "John Doe",
-        email: data.email,
-        token: "fake-jwt-token",
-      };
-
-      dispatch(login(response));
-      navigate("/home");
+      navigate("/login");
     } catch (error) {
       alert("Login failed. Please try again.");
     }
@@ -46,6 +37,16 @@ const Login: React.FC = () => {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <input {...register("firstName")} placeholder="Firstname"></input>
+          {errors.firstName && <p>{errors.firstName.message}</p>}
+        </div>
+
+        <div>
+          <input {...register("lastName")} placeholder="Lastname"></input>
+          {errors.lastName && <p>{errors.lastName.message}</p>}
+        </div>
+
         <div>
           <input {...register("email")} placeholder="Email"></input>
           {errors.email && <p>{errors.email.message}</p>}
@@ -61,11 +62,11 @@ const Login: React.FC = () => {
         </div>
 
         <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Logging in..." : "Login"}
+          {isSubmitting ? "Creating Account..." : "Create Account"}
         </button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Signup;
