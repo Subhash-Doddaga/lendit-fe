@@ -1,15 +1,15 @@
-import { apiClient } from "../api/clients";
-import type { User } from "../types/user";
+// import { apiClient } from "../api/axios";
+// import type { User } from "../types/user";
 
 
-export const userKeys = {
-    all: ["users"] as const,
-};
+// export const userKeys = {
+//     all: ["users"] as const,
+// };
 
 
-export const fetchUsers = async (): Promise<User[]> => {
-    const response = await apiClient.get("/users");
-    return response.data;
-};
+// export const fetchUsers = async (): Promise<User[]> => {
+//     const response = await apiClient.get("/users");
+//     return response.data;
+// };
 
 

@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
-import { login } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useLogin } from "../api/auth/auth.hooks";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -16,9 +16,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const Login: React.FC = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
+  const loginMutation = useLogin();
   const {
     register,
     handleSubmit,
@@ -29,15 +27,10 @@ const Login: React.FC = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      const response = {
-        id: "1",
-        name: "John Doe",
+      loginMutation.mutate({
         email: data.email,
-        token: "fake-jwt-token",
-      };
-
-      dispatch(login(response));
-      navigate("/home");
+        password: data.password,
+      });
     } catch (error) {
       alert("Login failed. Please try again.");
     }

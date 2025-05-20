@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import {useSignup} from "../api/auth/auth.hooks";
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("Firstname is Required"),
@@ -17,6 +18,7 @@ const validationSchema = Yup.object().shape({
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
+  let signupMutation = useSignup();
 
   const {
     register,
@@ -28,7 +30,13 @@ const Signup: React.FC = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      navigate("/login");
+        signupMutation.mutate({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            password: data.password
+        })
+    //   navigate("/login");
     } catch (error) {
       alert("Login failed. Please try again.");
     }
